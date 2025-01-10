@@ -1,0 +1,145 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    margin: 0;
+    display: flex;
+    padding: 0;
+    height: 100vh;
+    background-color: #F0EDE6; /* boja pozadine tijela */
+    
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.main-content {
+    flex-grow: 1;
+    background-color: #F0EDE6;
+    padding: 40px;
+    text-align: center;
+    width: 100%; 
+    overflow-y: auto; 
+    height: 100vh;
+}
+.first-word{
+    color: #d2ae90;
+    font-weight: 300;
+}
+.main-content h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: black;
+    
+}
+
+.main-content h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.main-content h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.main-content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.pulse-section img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.pulse-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.message {
+    font-size: 1rem;
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 10px 20px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #1FA5A6;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.logo{
+    max-width: 180px;
+    margin-bottom: 20px;
+}
+#startMeasurementButton{
+  background-color: black;
+  border: none;
+}
+
+.sidebar {
+width: 350px; 
+background-color: #d2ae90;
+padding: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+height: 100vh; 
+box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
+}
+
+.sidebar .nav-link {
+    text-decoration: none;
+    color: black;
+    margin: 10px 0;
+    font-size: 18px;
+}
+a.nav-link{
+    border-top: 70px;
+}
+
+.sidebar .nav-link:hover {
+    text-decoration: underline;
+}
+.d-flex {
+    height: 100vh; 
+    margin: 0;
+    padding: 0;
+}
+
+.pulse-section {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+}
+
+.puls-slika {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 10px; 
+}
+
+
+

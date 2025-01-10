@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnxiEase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,700|Playfair+Display:400i" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex">
+        <div class="sidebar">
+            <img src="slike/logo.png" alt="AnxiEase Logo" class="logo">
+            <a href="#" class="nav-link">O nama</a>
+            <a href="#" class="nav-link">Zašto AnxiEase</a>
+            <a href="#" class="nav-link">Savjeti naših ljekara</a>
+            <a href="#" class="nav-link">Tehnike disanja</a>
+            <a href="#" class="nav-link">Kontaktirajte nas</a>
+        </div>
+
+        <div class="main-content">
+            <h1><span class="first-word">Anxiease:</span> Ovladaj svojim stresom</h1>
+            <p>Živiš s anksioznošću i želiš bolje razumjeti svoje stresatore? AnxiEase ti pruža moćno oruđe za upravljanje stresom i smanjenjem anksioznosti.
+                Stres je čest pratilac modernog života, a njegovi učinci se mogu osjetiti na svim područjima života. Ubrzan puls, otežano disanje i osjećaj nemira su samo neki od simptoma koje može izazvati.</p>
+            <h2>Tvoj mir počinje ovdje</h2>
+            <p>Prati svoje otkucaje srca u realnom vremenu i otkrij kako različite situacije utječu na tvoju anksioznost.</p>
+            <p>Pronađi obrasce u svojim podacima i otkrij šta te najviše opterećuje.</p>
+            <p>Razgovaraj sa terapeutom o svojim stresatorima i riješi se neugodnog osjećaja.</p>
+            <h3>Kako koristiti naš uređaj?</h3>
+            <p>Jednostavno postavite prst na senzor i pritisnite dugme za mjerenje. Pratite upute na ekranu kako biste dobili najpreciznije rezultate.</p>
+
+            <div class="pulse-section">
+                <div class="puls-slika">
+                <img src="slike/srce.png" alt="Heart Icon">
+                <div id="pulse" class="pulse-display">Kliknite na dugme da biste započeli mjerenje.</div>
+                </div>
+                <div id="message" class="message"></div>
+            </div>
+            
+            <button class="btn btn-primary" id="startMeasurementButton">Započni novo mjerenje</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        // Firebase konfiguracija
+        const firebaseConfig = {
+            apiKey: "AIzaSyBX3O7ZELMoCOndSXpOquJdoLf5JX7pVIE",
+            authDomain: "anxiease-c3e32.firebaseapp.com",
+            databaseURL: "https://anxiease-c3e32-default-rtdb.firebaseio.com",
+            projectId: "anxiease-c3e32",
+            storageBucket: "anxiease-c3e32.appspot.com",
+            messagingSenderId: "355237861702",
+            appId: "1:355237861702:web:f414fd97957010f7992d47",
+            measurementId: "G-KVCRTTMBC6"
+        };
+
+        // Inicijalizacija Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Firebase reference
+        const sensorStatusRef = database.ref('device/sensorStatus');
+        const startMeasurementRef = database.ref('device/startMeasurement');
+        const bpmRef = database.ref('device/bpmAverage');
+
+        // Elementi
+        const startButton = document.getElementById('startMeasurementButton');
+        const pulseDisplay = document.getElementById('pulse');
+        const messageDisplay = document.getElementById('message');
+
+       // Praćenje statusa senzora
+sensorStatusRef.on('value', (snapshot) => {
+    const status = snapshot.val();
+    if (status === "Finger Detected") {
+        startButton.disabled = false;
+        pulseDisplay.innerText = "Senzor detektuje prst. Spremni ste za mjerenje.";
+    } else {
+        startButton.disabled = true;
+        pulseDisplay.innerText = "Molimo postavite prst na senzor.";
+        messageDisplay.innerText = ""; // Očisti poruku o stresu kada nema prsta na senzoru
+    }
+});
+
+// Signal za pokretanje mjerenja
+startButton.addEventListener('click', () => {
+    startMeasurementRef.set(true);
+    pulseDisplay.innerText = "Pokrenuto mjerenje. Molimo držite prst na senzoru.";
+    messageDisplay.innerText = ""; 
+});
+
+// Prikaz BPM podataka i poruke o nivou stresa
+bpmRef.on('value', (snapshot) => {
+    const bpm = snapshot.val();
+    if (bpm) {
+        pulseDisplay.innerText = `Vrijednost: ${bpm} BPM`;
+
+        // Dodavanje poruke o nivou stresa
+        if (bpm >= 60 && bpm <= 100) {
+            messageDisplay.innerText = "Čestitamo! Trenutno ste opušteni i uravnoteženi. Nastavite tako!";
+            messageDisplay.style.color = "green";
+            messageDisplay.style.fontFamily='Montserrat', sans-serif;
+            messageDisplay.style.fontWeight=105;
+        } else if (bpm > 100 && bpm <= 120) {
+            messageDisplay.innerText = "Primjećujemo blagu povišenu razinu stresa. Možda je vrijeme za kratku pauzu i relaksaciju.";
+            messageDisplay.style.color = "orange";
+            messageDisplay.style.fontFamily='Montserrat', sans-serif;
+            messageDisplay.style.fontWeight=105;
+        } else if (bpm > 120) {
+            messageDisplay.innerText = "Vaša razina stresa je trenutno povišena. Preporučujemo da probate neku od naših tehnika disanja ili relaksacije.";
+            messageDisplay.style.color = "red";
+            messageDisplay.style.fontFamily='Montserrat', sans-serif;
+            messageDisplay.style.fontWeight=105;
+
+        }
+    } else {
+        
+        messageDisplay.innerText = "";
+    }
+});
+       
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
